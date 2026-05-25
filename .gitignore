@@ -1,3 +1,5 @@
 node_modules/
 database/escom_eventos.db
 npm-debug.log*
+backup-project.zip
+restored_repo

@@ -1,6 +1,9 @@
 const registrationModel = require('../models/registrationModel');
 const credentialService = require('../services/credentialService');
 const PDFDocument = require('pdfkit');
+const notificationService = require('../services/notificationService');
+const mailerService = require('../services/mailerService');
+const rbacModel = require('../models/rbacModel');
 
 function getRegistrationDefaults(currentActor) {
   if (!currentActor) {
@@ -108,6 +111,43 @@ async function submit(req, res) {
     });
 
     const event = await registrationModel.getPublishedEventById(eventId);
+
+    try {
+      const targetActorId = event && event.createdByActorId ? event.createdByActorId : null;
+      await notificationService.createNotification({
+        actorId: targetActorId,
+        eventId: eventId,
+        type: 'registration.created',
+        message: `Nuevo registro (${payload.fullName} — ${payload.email}) en el evento: ${event ? event.title : eventId}`
+      });
+    } catch (err) {
+      // no bloquear respuesta por fallo en notificaciones
+    }
+    try {
+      // enviar correo al registrante
+      const to = payload.personalEmail || payload.institutionalEmail || payload.email;
+      if (to) {
+        await mailerService.sendMail({
+          to,
+          subject: `Confirmación de registro: ${event ? event.title : ''}`,
+          text: `Tu registro para el evento "${event ? event.title : ''}" fue recibido. Estado: ${result.status}`
+        });
+      }
+
+      // notificar por correo al creador del evento si existe
+      if (event && event.createdByActorId) {
+        const actor = await rbacModel.getActorById(event.createdByActorId);
+        if (actor && actor.email) {
+          await mailerService.sendMail({
+            to: actor.email,
+            subject: `Nuevo registro: ${event.title}`,
+            text: `Se ha registrado ${payload.fullName} (${to}) en tu evento "${event.title}".`
+          });
+        }
+      }
+    } catch (err) {
+      // ignorar fallos de correo
+    }
     const prefill = getRegistrationDefaults(req.currentActor) || { personType: 'ALUMNO', fullName: '', institutionalEmail: '', personalEmail: '', boleta: '', carrera: '', escuela: '', turno: '' };
 
     return res.render('registrationForm', {

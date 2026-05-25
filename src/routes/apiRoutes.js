@@ -43,6 +43,7 @@ router.get('/approval-queue', async (req, res) => {
 
 const registrationController = require('../controllers/registrationController');
 const rbacController = require('../controllers/rbacController');
+const notificationService = require('../services/notificationService');
 
 router.get('/reports/:eventId/csv', requirePermission('report.view_attendance'), registrationController.exportCsv);
 router.get('/reports/:eventId/pdf', requirePermission('report.view_attendance'), registrationController.exportPdf);
@@ -53,5 +54,25 @@ router.post('/rbac/permissions', requirePermission('rbac.manage'), rbacControlle
 router.post('/rbac/roles', requirePermission('rbac.manage'), rbacController.apiCreateRole);
 router.post('/rbac/roles/assign-permission', requirePermission('rbac.manage'), rbacController.apiAddPermissionToRole);
 router.post('/rbac/actors/assign-role', requirePermission('rbac.manage'), rbacController.apiAssignRoleToActor);
+
+// Notifications
+router.get('/notifications', async (req, res) => {
+	try {
+		const list = await notificationService.getNotificationsForActor(req.currentActor.id);
+		res.json({ ok: true, data: list });
+	} catch (error) {
+		res.status(500).json({ ok: false, message: error.message });
+	}
+});
+
+router.post('/notifications/:id/mark-read', async (req, res) => {
+	try {
+		const id = parseInt(req.params.id, 10);
+		const updated = await notificationService.markAsRead(id);
+		res.json({ ok: true, data: updated });
+	} catch (error) {
+		res.status(500).json({ ok: false, message: error.message });
+	}
+});
 
 module.exports = router;

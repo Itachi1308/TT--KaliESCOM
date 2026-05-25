@@ -1,5 +1,7 @@
 const eventModel = require('../models/eventModel');
 const { requirePermission } = require('../middleware/authorization');
+const notificationService = require('../services/notificationService');
+const mailerService = require('../services/mailerService');
 
 async function listEvents(req, res) {
   try {
@@ -82,6 +84,28 @@ async function createEvent(req, res) {
       costAmount: payload.costAmount
     });
 
+    try {
+      await notificationService.createNotification({
+        actorId: req.currentActor ? req.currentActor.id : null,
+        eventId: created.id,
+        type: 'event.created',
+        message: `Evento creado: ${created.title}`
+      });
+    } catch (err) {
+      // no bloquear la respuesta si falla la notificación
+    }
+    try {
+      if (req.currentActor && req.currentActor.email) {
+        await mailerService.sendMail({
+          to: req.currentActor.email,
+          subject: `Evento creado: ${created.title}`,
+          text: `Se ha creado el evento "${created.title}". Revisa la plataforma para más detalles.`
+        });
+      }
+    } catch (err) {
+      // ignorar fallos de correo
+    }
+
     res.status(201).json({ ok: true, data: created });
   } catch (error) {
     res.status(400).json({ ok: false, message: error.message });
@@ -94,6 +118,27 @@ async function updateEventController(req, res) {
     const payload = req.body || {};
     const updated = await eventModel.updateEvent(id, payload);
     if (!updated) return res.status(404).json({ ok: false, message: 'Evento no encontrado' });
+    try {
+      await notificationService.createNotification({
+        actorId: req.currentActor ? req.currentActor.id : null,
+        eventId: updated.id,
+        type: 'event.updated',
+        message: `Evento actualizado: ${updated.title}`
+      });
+    } catch (err) {
+      // ignorar errores de notificación
+    }
+    try {
+      if (req.currentActor && req.currentActor.email) {
+        await mailerService.sendMail({
+          to: req.currentActor.email,
+          subject: `Evento actualizado: ${updated.title}`,
+          text: `El evento "${updated.title}" ha sido actualizado.`
+        });
+      }
+    } catch (err) {
+      // ignorar fallos de correo
+    }
     res.json({ ok: true, data: updated });
   } catch (error) {
     res.status(400).json({ ok: false, message: error.message });

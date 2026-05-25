@@ -415,6 +415,21 @@ async function createSchema(db) {
     CREATE INDEX IF NOT EXISTS idx_event_registrations_event ON event_registrations(event_id);
     CREATE INDEX IF NOT EXISTS idx_event_registrations_email ON event_registrations(email);
     CREATE INDEX IF NOT EXISTS idx_event_registrations_status ON event_registrations(status);
+    
+    CREATE TABLE IF NOT EXISTS notifications (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      actor_id INTEGER,
+      event_id INTEGER,
+      type TEXT NOT NULL,
+      message TEXT NOT NULL,
+      is_read INTEGER NOT NULL DEFAULT 0,
+      created_at TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (actor_id) REFERENCES actors(id),
+      FOREIGN KEY (event_id) REFERENCES events(id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_notifications_actor ON notifications(actor_id);
+    CREATE INDEX IF NOT EXISTS idx_notifications_is_read ON notifications(is_read);
   `);
 }
 

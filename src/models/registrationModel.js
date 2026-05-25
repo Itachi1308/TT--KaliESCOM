@@ -10,8 +10,9 @@ async function getPublishedEventById(eventId) {
         e.start_datetime AS start,
         e.end_datetime AS end,
         e.status,
-        s.name AS spaceName,
+          s.name AS spaceName,
         s.capacity AS capacity
+          , e.created_by_actor_id AS createdByActorId
       FROM events e
       INNER JOIN spaces s ON s.id = e.space_id
       WHERE e.id = ? AND e.status = 'PUBLICADO'
