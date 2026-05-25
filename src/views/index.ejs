@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+<section class="card hero">
+  <h2>Plataforma centralizada de eventos ESCOM</h2>
+  <p>
+    Este sistema organiza eventos academicos, culturales y deportivos con calendario interactivo,
+    filtros por tipo y espacio, y flujo de operacion alineado con los procesos reales de ESCOM.
+  </p>
+  <div class="hero-actions">
+    <a href="/calendario" class="btn-primary">Ir al calendario interactivo</a>
+    <a href="/factibilidad" class="btn-secondary">Ver factibilidad del sistema</a>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Proximos eventos publicados</h3>
+  <div class="event-grid">
+    <% upcoming.forEach((ev) => { %>
+      <article class="event-item" style="border-left-color:<%= ev.color %>">
+        <h4><%= ev.title %></h4>
+        <p><strong>Tipo:</strong> <%= ev.typeName %></p>
+        <p><strong>Espacio:</strong> <%= ev.spaceName %></p>
+        <p><strong>Inicio:</strong> <%= new Date(ev.start).toLocaleString('es-MX') %></p>
+      </article>
+    <% }) %>
+  </div>
+</section>
+<%- include('partials/footer') %>

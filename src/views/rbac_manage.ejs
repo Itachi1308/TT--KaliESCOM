@@ -1,0 +1,102 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Administrar RBAC</h2>
+  <% if (errors && errors.length) { %>
+    <div class="alert alert-error"><%= errors.join('; ') %></div>
+  <% } %>
+</section>
+
+<section class="card">
+  <h3>Crear permiso</h3>
+  <form method="POST" action="/rbac/manage/permissions">
+    <label>Código</label>
+    <input name="code" required />
+    <label>Nombre</label>
+    <input name="name" required />
+    <button class="btn-primary">Crear permiso</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Crear rol</h3>
+  <form method="POST" action="/rbac/manage/roles">
+    <label>Código</label>
+    <input name="code" required />
+    <label>Nombre</label>
+    <input name="name" required />
+    <button class="btn-primary">Crear rol</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Asignar permiso a rol</h3>
+  <form method="POST" action="/rbac/manage/roles/assign-permission">
+    <label>Rol (code)</label>
+    <input name="roleCode" required />
+    <label>Permiso (code)</label>
+    <input name="permissionCode" required />
+    <button class="btn-primary">Asignar</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Quitar permiso de rol</h3>
+  <form method="POST" action="/rbac/manage/roles/remove-permission">
+    <label>Rol (code)</label>
+    <input name="roleCode" required />
+    <label>Permiso (code)</label>
+    <input name="permissionCode" required />
+    <button class="btn-danger">Quitar permiso</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Asignar rol a actor</h3>
+  <form method="POST" action="/rbac/manage/actors/assign-role">
+    <label>Actor</label>
+    <select name="actorId">
+      <% actors.forEach(function(actor){ %>
+        <option value="<%= actor.id %>"><%= actor.fullName %> (<%= actor.username %>)</option>
+      <% }) %>
+    </select>
+    <label>Rol (code)</label>
+    <input name="roleCode" required />
+    <button class="btn-primary">Asignar rol</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Quitar rol a actor</h3>
+  <form method="POST" action="/rbac/manage/actors/remove-role">
+    <label>Actor</label>
+    <select name="actorId">
+      <% actors.forEach(function(actor){ %>
+        <option value="<%= actor.id %>"><%= actor.fullName %> (<%= actor.username %>)</option>
+      <% }) %>
+    </select>
+    <label>Rol (code)</label>
+    <input name="roleCode" required />
+    <button class="btn-danger">Quitar rol</button>
+  </form>
+</section>
+
+<section class="card">
+  <h3>Matriz actual</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Rol</th><th>Permisos</th></tr>
+      </thead>
+      <tbody>
+        <% matrix.matrix.forEach(function(row){ %>
+          <tr>
+            <td><%= row.role.name %> (<%= row.role.code %>)</td>
+            <td><%= row.permissionCodes.join(', ') %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

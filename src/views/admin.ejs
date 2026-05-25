@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Panel de gestion y aprobaciones</h2>
+  <p>
+    Actor activo: <strong><%= currentActor ? currentActor.fullName : 'No definido' %></strong>
+    <% if (currentRoles && currentRoles.length) { %>
+      | Roles: <%= currentRoles.map((r) => r.name).join(', ') %>
+    <% } %>
+  </p>
+  <% if (errors && errors.length) { %>
+    <div class="error-box">
+      <% errors.forEach((error) => { %>
+        <p><%= error %></p>
+      <% }) %>
+    </div>
+  <% } %>
+</section>
+
+<section class="stats-grid">
+  <article class="card">
+    <h3>Crear evento (Borrador)</h3>
+    <form method="POST" action="/admin/eventos">
+      <label>Titulo</label>
+      <input name="title" required />
+
+      <label>Descripcion</label>
+      <textarea name="description" rows="3" required></textarea>
+
+      <label>Inicio</label>
+      <input type="datetime-local" name="start" required />
+
+      <label>Fin</label>
+      <input type="datetime-local" name="end" required />
+
+      <label>Tipo</label>
+      <select name="typeId" required>
+        <% eventTypes.forEach((type) => { %>
+          <option value="<%= type.id %>"><%= type.name %></option>
+        <% }) %>
+      </select>
+
+      <label>Espacio</label>
+      <select name="spaceId" required>
+        <% spaces.forEach((space) => { %>
+          <option value="<%= space.id %>"><%= space.name %> (<%= space.kind %>)</option>
+        <% }) %>
+      </select>
+
+      <label>Organizador</label>
+      <input name="organizer" value="<%= currentActor ? currentActor.fullName : '' %>" required />
+
+      <label>Requiere registro</label>
+      <select name="requiresRegistration">
+        <option value="1">Si</option>
+        <option value="0">No</option>
+      </select>
+
+      <label>Tiene externos</label>
+      <select name="hasExternalVisitors">
+        <option value="0">No</option>
+        <option value="1">Si</option>
+      </select>
+
+      <label>Costo (debe ser 0)</label>
+      <input type="number" min="0" step="0.01" name="costAmount" value="0" />
+
+      <button class="btn-primary full" type="submit">Guardar borrador</button>
+    </form>
+  </article>
+
+  <article class="card">
+    <h3>Mis eventos</h3>
+    <% if (!mine.length) { %>
+      <p class="muted">No has creado eventos aun.</p>
+    <% } %>
+    <% mine.forEach((event) => { %>
+      <div class="event-item">
+        <h4><%= event.title %></h4>
+        <p><strong>Estado:</strong> <%= event.status %></p>
+        <p><strong>Tipo:</strong> <%= event.typeName %> | <strong>Espacio:</strong> <%= event.spaceName %></p>
+        <% if (event.status === 'BORRADOR') { %>
+          <form method="POST" action="/admin/eventos/<%= event.id %>/enviar">
+            <button class="btn-secondary" type="submit">Enviar a revision</button>
+          </form>
+        <% } %>
+      </div>
+    <% }) %>
+  </article>
+
+  <article class="card">
+    <h3>Cola de aprobaciones</h3>
+    <% if (!queue.length) { %>
+      <p class="muted">No tienes aprobaciones pendientes para tu rol.</p>
+    <% } %>
+    <% queue.forEach((item) => { %>
+      <div class="event-item">
+        <h4><%= item.title %></h4>
+        <p><strong>Etapa:</strong> <%= item.stageCode %> | <strong>Rol requerido:</strong> <%= item.requiredRoleName %></p>
+        <p><strong>Espacio:</strong> <%= item.spaceName %></p>
+        <form method="POST" action="/admin/aprobaciones/<%= item.id %>/decidir">
+          <label>Comentario</label>
+          <textarea name="comments" rows="2"></textarea>
+          <div class="inline-actions">
+            <button class="btn-primary" type="submit" name="decision" value="APROBAR">Aprobar</button>
+            <button class="btn-secondary" type="submit" name="decision" value="RECHAZAR">Rechazar</button>
+          </div>
+        </form>
+      </div>
+    <% }) %>
+  </article>
+</section>
+<%- include('partials/footer') %>

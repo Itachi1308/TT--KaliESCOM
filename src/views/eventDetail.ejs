@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2><%= event.title %></h2>
+  <p><strong>Tipo:</strong> <span class="badge" style="background:<%= event.color %>"><%= event.typeName %></span></p>
+  <p><strong>Espacio:</strong> <%= event.spaceName %> (<%= event.spaceKind %>) - Capacidad: <%= event.capacity %></p>
+  <p><strong>Fecha:</strong> <%= new Date(event.start).toLocaleString('es-MX') %> — <%= new Date(event.end).toLocaleString('es-MX') %></p>
+  <p><strong>Organizador:</strong> <%= event.organizer %></p>
+  <p><strong>Descripción:</strong> <%= event.description %></p>
+
+  <div class="separator"></div>
+
+  <% const roleCodes = (currentRoles || []).map(r => r.code); %>
+
+  <% if (roleCodes.includes('ROL_ALUMNO')) { %>
+    <section>
+      <h3>Información para Alumno</h3>
+      <ul>
+        <li>Si el evento requiere registro: asegúrate de tener tu boleta y datos personales completos.</li>
+        <li>Verifica horarios para evitar empalmes con otras actividades.</li>
+        <li>Si estás confirmado recibirás notificación; si estás en lista de espera, serás notificado si hay cupo.</li>
+      </ul>
+      <% if (currentPermissions && currentPermissions.find(p => p.code === 'registration.create')) { %>
+        <a class="btn-secondary" href="/registro/<%= event.id %>">Registrarme</a>
+      <% } %>
+    </section>
+  <% } %>
+
+  <% if (roleCodes.includes('ROL_DIRECCION')) { %>
+    <section>
+      <h3>Información para Dirección</h3>
+      <ul>
+        <li>Estado: <strong><%= event.status %></strong></li>
+        <li>Acciones rápidas: publicar, revisar aprobaciones y descargar reportes de asistencia.</li>
+        <li>Visor de registros: <a href="/reportes">Ir a reportes</a></li>
+      </ul>
+    </section>
+  <% } %>
+
+  <% if (!roleCodes.includes('ROL_ALUMNO') && !roleCodes.includes('ROL_DIRECCION')) { %>
+    <section>
+      <h3>Información general</h3>
+      <p>Descripción y datos del evento. Si desea participar, inicie sesión con su cuenta y revise si puede registrarse.</p>
+      <% if (currentPermissions && currentPermissions.find(p => p.code === 'registration.create')) { %>
+        <a class="btn-secondary" href="/registro/<%= event.id %>">Registrarme</a>
+      <% } %>
+    </section>
+  <% } %>
+
+</section>
+<%- include('partials/footer') %>

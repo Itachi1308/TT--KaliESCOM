@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= pageTitle %> | ESCOM Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/public/css/styles.css" />
+</head>
+<body>
+  <main class="main-content" style="max-width:560px;">
+    <section class="card" style="margin-top:3rem;">
+      <h1>ESCOM Eventos</h1>
+      <p>Inicia sesion con el perfil institucional correspondiente.</p>
+
+      <% if (error) { %>
+        <div class="error-box">
+          <p><%= error %></p>
+        </div>
+      <% } %>
+
+      <form method="POST" action="/login">
+        <label>Usuario</label>
+        <input type="text" name="username" placeholder="direccion" required />
+
+        <label>Contrasena</label>
+        <input type="password" name="password" placeholder="********" required />
+
+        <button type="submit" class="btn-primary full">Iniciar sesion</button>
+      </form>
+
+      <div class="muted" style="margin-top:1rem;">
+        <p>Perfiles de prueba:</p>
+        <p>direccion, subdir.academica, subdir.admin, udi, servicios, profesor.club, club.programacion, club.cultural, alumno</p>
+        <p>Contrasena comun: Escom2026!</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

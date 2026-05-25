@@ -1,0 +1,44 @@
+{
+  "source": "TT 2026-B116 (heuristic extraction)",
+  "technologies": [
+    "Node.js",
+    "Express",
+    "EJS",
+    "SQLite",
+    "PDFKit",
+    "Docker",
+    "GitHub Actions",
+    "Jest",
+    "Supertest"
+  ],
+  "functional_requirements": [
+    "Gestión de eventos (CRUD)",
+    "Flujo de aprobaciones RBAC según organigrama",
+    "Registro y control de aforo",
+    "Exportes de reportes (CSV/PDF)",
+    "Lectura/parseo de credenciales QR",
+    "Panel de administración RBAC",
+    "Migraciones y script de inicialización de BD",
+    "Despliegue con Docker",
+    "Pruebas unitarias y de integración"
+  ],
+  "non_functional": [
+    "Logs mínimamente informativos",
+    "Imágenes Docker optimizadas",
+    "Configuración de CI que ejecute migraciones y tests",
+    "Documentación README con instrucciones de entrega"
+  ],
+  "mapped_implementations": {
+    "Gestión de eventos (CRUD)": "src/models/eventModel.js + src/controllers/eventController.js + routes",
+    "Flujo de aprobaciones RBAC": "src/models/rbacModel.js + src/controllers/rbacController.js + views/rbac.ejs",
+    "Registro y control de aforo": "src/models/registrationModel.js + registrationController",
+    "Exportes de reportes": "registrationController.exportCsv / exportPdf (PDFKit)",
+    "Parseo QR": "src/services/credentialService.js (tolerante)",
+    "Panel RBAC": "src/views/rbac_manage.ejs + webRoutes + controllers",
+    "Migraciones": "scripts/migrate.js + migrations/*.sql",
+    "Docker": "Dockerfile (multistage) + docker-compose.yml",
+    "Pruebas": "tests/*.test.js (Jest + Supertest)"
+  },
+  "status": "partial_complete",
+  "notes": "Contenido extraído heurísticamente; revisar PDF original para confirmar textos exactos."
+}

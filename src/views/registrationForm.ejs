@@ -1,0 +1,132 @@
+<%- include('partials/header') %>
+<section class="card hero-banner">
+  <div>
+    <h2>Registro al evento</h2>
+    <p class="muted"><%= event.title %></p>
+  </div>
+  <div class="hero-banner-meta">
+    <span class="badge" style="background:#0047B6"><%= event.spaceName %></span>
+    <span class="badge" style="background:#00AFCF"><%= event.capacity %> cupos</span>
+  </div>
+  <p><strong>Horario:</strong> <%= new Date(event.start).toLocaleString('es-MX') %> - <%= new Date(event.end).toLocaleString('es-MX') %></p>
+
+  <% if (errors && errors.length) { %>
+    <div class="error-box">
+      <% errors.forEach((error) => { %>
+        <p><%= error %></p>
+      <% }) %>
+    </div>
+  <% } %>
+
+  <% if (success) { %>
+    <div class="success-box">
+      <p><strong><%= success %></strong></p>
+    </div>
+  <% } %>
+</section>
+
+<% const pf = prefill || {}; %>
+
+<section class="layout-two-cols">
+  <article class="card">
+    <h3>Autollenado por credencial QR</h3>
+    <p class="muted">Pega el enlace o deja que el lector QR escriba el contenido. El sistema llenará los datos del alumno o docente desde la credencial vcred.</p>
+
+    <div class="qr-autofill" data-qr-autofill data-endpoint="/api/credenciales/parsear">
+      <label>Enlace o token QR</label>
+      <input id="credentialQrInputPreview" placeholder="https://servicios.dae.ipn.mx/vcred/?h=..." />
+      <button type="button" class="btn-secondary full" data-qr-fill>Autollenar credencial</button>
+      <p class="muted" data-qr-status>Los campos se completarán con boleta, nombre, carrera, escuela, CURP y turno cuando la credencial sea valida.</p>
+      <div class="chip-row" data-qr-preview></div>
+    </div>
+  </article>
+
+  <article class="card">
+    <h3>Datos de asistencia</h3>
+    <form method="POST" action="/registro/<%= event.id %>" data-qr-autofill-form>
+      <div class="credential-grid">
+        <div data-person-types="ALUMNO">
+          <label>Boleta</label>
+          <input name="boleta" value="<%= (pf && pf.personType === 'ALUMNO' && pf.boleta) ? pf.boleta : '' %>" />
+        </div>
+        <div data-person-types="ALUMNO DOCENTE EXTERNO">
+          <label>Nombre completo</label>
+          <input name="fullName" value="<%= (pf && pf.fullName) ? pf.fullName : '' %>" required />
+        </div>
+        <div data-person-types="ALUMNO DOCENTE EXTERNO">
+          <label>Correo institucional</label>
+          <input type="email" name="institutionalEmail" value="<%= (pf && pf.institutionalEmail) ? pf.institutionalEmail : '' %>" required />
+        </div>
+        <div data-person-types="ALUMNO DOCENTE EXTERNO">
+          <label>Correo personal</label>
+          <input type="email" name="personalEmail" value="<%= (pf && pf.personalEmail) ? pf.personalEmail : '' %>" required />
+        </div>
+        <div data-person-types="ALUMNO DOCENTE">
+          <label>Escuela / procedencia academica</label>
+          <input name="escuela" placeholder="ESCOM" value="<%= (pf && pf.escuela) ? pf.escuela : '' %>" />
+        </div>
+        <div data-person-types="ALUMNO">
+          <label>Carrera</label>
+          <input name="carrera" value="<%= (pf && pf.carrera) ? pf.carrera : '' %>" />
+        </div>
+        <div data-person-types="ALUMNO">
+          <label>Turno</label>
+          <input name="turno" value="<%= (pf && pf.turno) ? pf.turno : '' %>" />
+        </div>
+        <div data-person-types="DOCENTE">
+          <label>Numero de empleado</label>
+          <input name="employeeNumber" value="<%= (pf && pf.employeeNumber) ? pf.employeeNumber : '' %>" />
+        </div>
+        <div data-person-types="EXTERNO">
+          <label>Procedencia externa</label>
+          <input name="procedencia" value="<%= (pf && pf.procedencia) ? pf.procedencia : '' %>" />
+        </div>
+        <div data-person-types="ALUMNO DOCENTE EXTERNO">
+          <label>Semestre</label>
+          <input name="semestre" value="<%= (pf && pf.semestre) ? pf.semestre : '' %>" required />
+        </div>
+      </div>
+
+      <input type="hidden" name="credentialQrInput" />
+      <input type="hidden" name="credentialQrUrl" />
+      <input type="hidden" name="credentialQrToken" />
+      <input type="hidden" name="credentialCurp" />
+      <input type="hidden" name="credentialEscuela" />
+      <input type="hidden" name="credentialTurno" />
+
+      <label>Tipo de persona</label>
+      <select name="personType" required>
+        <option value="ALUMNO" <%= (pf && pf.personType === 'ALUMNO') ? 'selected' : '' %>>Alumno</option>
+        <option value="DOCENTE" <%= (pf && pf.personType === 'DOCENTE') ? 'selected' : '' %>>Docente</option>
+        <option value="EXTERNO" <%= (pf && pf.personType === 'EXTERNO') ? 'selected' : '' %>>Externo</option>
+      </select>
+
+      <p class="field-hint">Si eliges Alumno, el rol se fija automáticamente como Observador.</p>
+
+      <label>Sexo</label>
+      <select name="sexo" required>
+        <option value="HOMBRE">Hombre</option>
+        <option value="MUJER">Mujer</option>
+        <option value="PREFIERO_NO_DECIR">Prefiero no decirlo</option>
+      </select>
+
+      <div data-person-types="DOCENTE EXTERNO">
+        <label>Rol en el evento</label>
+      <select name="participantRole" required>
+        <option value="ASISTENTE">Asistente</option>
+        <option value="PONENTE">Ponente</option>
+        <option value="STAFF">Staff</option>
+        <option value="PARTICIPANTE_ACTIVO">Participante activo</option>
+        <option value="OBSERVADOR">Observador</option>
+      </select>
+      </div>
+
+      <label>Equipo (opcional para torneos/hackatones)</label>
+      <input name="teamName" />
+
+      <button class="btn-primary full" type="submit">Registrar asistencia</button>
+    </form>
+  </article>
+</section>
+<script src="/public/js/registration-qr.js"></script>
+<%- include('partials/footer') %>

@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Eventos publicados</h2>
+  <p>Listado consolidado de eventos para pruebas funcionales de registro y visualizacion.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Evento</th>
+          <th>Tipo</th>
+          <th>Espacio</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Accion</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% events.forEach((ev) => { %>
+        <tr>
+          <td><a href="/eventos/<%= ev.id %>" target="_blank" rel="noopener noreferrer"><%= ev.title %></a></td>
+          <td><span class="badge" style="background:<%= ev.color %>"><%= ev.typeName %></span></td>
+          <td><%= ev.spaceName %></td>
+          <td><%= new Date(ev.start).toLocaleString('es-MX') %></td>
+          <td><%= new Date(ev.end).toLocaleString('es-MX') %></td>
+          <td>
+            <a class="btn-secondary" href="/registro/<%= ev.id %>">Registrarme</a>
+            <a class="btn" href="/eventos/<%= ev.id %>" target="_blank" rel="noopener noreferrer">Ver detalle</a>
+          </td>
+        </tr>
+      <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>

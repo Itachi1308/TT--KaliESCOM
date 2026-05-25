@@ -1,0 +1,8 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Acceso denegado (403)</h2>
+  <p>El actor activo no cuenta con el permiso requerido.</p>
+  <p><strong>Permiso requerido:</strong> <%= requiredPermission %></p>
+  <a href="/rbac" class="btn-primary">Ver matriz RBAC</a>
+</section>
+<%- include('partials/footer') %>

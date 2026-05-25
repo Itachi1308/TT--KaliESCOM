@@ -1,0 +1,12 @@
+node_modules
+npm-debug.log
+.env
+database/escom_eventos.db
+debug/
+Dockerfile
+.github/
+migrations/
+*.tgz
+*.log
+.vscode
+coverage/

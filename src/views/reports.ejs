@@ -1,0 +1,116 @@
+<%- include('partials/header') %>
+<section class="card hero-banner">
+  <div>
+    <h2>Reportes de asistencia y estadisticas</h2>
+    <p class="muted">Consulta aforo, distribuciones y controla entrada/salida con el QR de credencial.</p>
+  </div>
+  <form method="GET" action="/reportes" class="report-selector">
+    <label>Evento a consultar</label>
+    <select name="eventId" required>
+      <option value="">Selecciona evento</option>
+      <% events.forEach((ev) => { %>
+        <option value="<%= ev.id %>" <%= selectedEventId === ev.id ? 'selected' : '' %>>
+          <%= ev.title %> (<%= new Date(ev.start).toLocaleDateString('es-MX') %>)
+        </option>
+      <% }) %>
+    </select>
+    <button class="btn-primary" type="submit">Generar reporte</button>
+  </form>
+</section>
+
+<% if (report) { %>
+  <section class="stats-grid">
+    <article class="card">
+      <h3>Resumen</h3>
+      <p><strong>Evento:</strong> <%= report.event.title %></p>
+      <p><strong>Espacio:</strong> <%= report.event.spaceName %> (capacidad <%= report.event.capacity %>)</p>
+      <p><strong>Total registros:</strong> <%= report.totals.total %></p>
+      <p><strong>Confirmados:</strong> <%= report.totals.confirmados %></p>
+      <p><strong>Lista de espera:</strong> <%= report.totals.espera %></p>
+      <p><strong>Con entrada:</strong> <%= report.totals.conEntrada %></p>
+      <p><strong>Con salida:</strong> <%= report.totals.conSalida %></p>
+      <p><strong>Porcentaje de entrada:</strong> <%= report.totals.porcentajeEntrada %>%</p>
+    </article>
+
+    <article class="card">
+      <h3>Distribucion por sexo</h3>
+      <% report.bySexo.forEach((row) => { %>
+        <p><strong><%= row.sexo %>:</strong> <%= row.total %></p>
+      <% }) %>
+    </article>
+
+    <article class="card">
+      <h3>Distribucion por carrera</h3>
+      <% report.byCarrera.forEach((row) => { %>
+        <p><strong><%= row.carrera %>:</strong> <%= row.total %></p>
+      <% }) %>
+    </article>
+
+    <article class="card">
+      <h3>Distribucion por origen academico</h3>
+      <% report.byProcedencia.forEach((row) => { %>
+        <p><strong><%= row.categoria %> - <%= row.institucion %>:</strong> <%= row.total %></p>
+      <% }) %>
+    </article>
+  </section>
+
+  <section class="card">
+    <h3>Control de entrada/salida</h3>
+    <div class="qr-control-grid">
+      <form method="POST" action="/reportes/qr/checkin" class="card soft-card">
+        <h4>Entrada por QR</h4>
+        <input type="hidden" name="eventId" value="<%= report.event.id %>" />
+        <label>QR de credencial</label>
+        <input name="credentialQrInput" placeholder="Pega o escanea el enlace QR" required />
+        <button type="submit" class="btn-primary full">Marcar entrada</button>
+      </form>
+
+      <form method="POST" action="/reportes/qr/checkout" class="card soft-card">
+        <h4>Salida por QR</h4>
+        <input type="hidden" name="eventId" value="<%= report.event.id %>" />
+        <label>QR de credencial</label>
+        <input name="credentialQrInput" placeholder="Pega o escanea el enlace QR" required />
+        <button type="submit" class="btn-secondary full">Marcar salida</button>
+      </form>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Asistente</th>
+            <th>Tipo</th>
+            <th>Estado</th>
+            <th>Rol</th>
+            <th>Entrada</th>
+            <th>Salida</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% report.registrations.forEach((reg) => { %>
+            <tr>
+              <td><%= reg.fullName %></td>
+              <td><%= reg.personType %></td>
+              <td><%= reg.status %></td>
+              <td><%= reg.participantRole %></td>
+              <td><%= reg.checkinAt ? new Date(reg.checkinAt).toLocaleString('es-MX') : '-' %></td>
+              <td><%= reg.checkoutAt ? new Date(reg.checkoutAt).toLocaleString('es-MX') : '-' %></td>
+              <td>
+                <form method="POST" action="/reportes/registro/<%= reg.id %>/checkin" style="display:inline-block;">
+                  <input type="hidden" name="eventId" value="<%= report.event.id %>" />
+                  <button type="submit" class="btn-secondary">Entrada</button>
+                </form>
+                <form method="POST" action="/reportes/registro/<%= reg.id %>/checkout" style="display:inline-block;">
+                  <input type="hidden" name="eventId" value="<%= report.event.id %>" />
+                  <button type="submit" class="btn-secondary">Salida</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </section>
+<% } %>
+<%- include('partials/footer') %>

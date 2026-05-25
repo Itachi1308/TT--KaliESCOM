@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= pageTitle %> | ESCOM Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+  <link rel="stylesheet" href="/public/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-wrap">
+      <h1>ESCOM Eventos</h1>
+      <p>Sistema institucional para eventos academicos, culturales y deportivos</p>
+    </div>
+    <% if (isAuthenticated && currentActor) { %>
+      <div class="actor-toolbar">
+        <p class="actor-perms">
+          Sesion activa: <strong><%= currentActor.fullName %></strong>
+          <% if (currentRoles && currentRoles.length) { %>
+            | Roles: <%= currentRoles.map((item) => item.name).join(', ') %>
+          <% } %>
+        </p>
+        <form method="POST" action="/logout">
+          <button type="submit" class="btn-secondary">Cerrar sesion</button>
+        </form>
+      </div>
+    <% } %>
+    <nav class="nav-actions">
+      <% const permissionCodes = (currentPermissions || []).map((item) => item.code); %>
+      <a class="btn-nav" href="/">Inicio</a>
+      <a class="btn-nav" href="/calendario">Calendario</a>
+      <a class="btn-nav" href="/eventos">Eventos</a>
+      <% if (permissionCodes.includes('registration.view_own')) { %>
+        <a class="btn-nav" href="/mis-registros">Mis registros</a>
+      <% } %>
+      <% if (permissionCodes.includes('report.view_attendance')) { %>
+        <a class="btn-nav" href="/reportes">Reportes</a>
+      <% } %>
+      <a class="btn-nav" href="/flujo">Flujo</a>
+      <a class="btn-nav" href="/factibilidad">Factibilidad</a>
+      <a class="btn-nav" href="/rbac">Roles y permisos</a>
+      <% if (permissionCodes.includes('event.create_draft')) { %>
+        <a class="btn-nav" href="/admin">Panel admin</a>
+      <% } %>
+    </nav>
+  </header>
+  <main class="main-content">

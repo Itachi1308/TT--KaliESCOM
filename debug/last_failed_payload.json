@@ -1,0 +1,30 @@
+{
+  "time": "2026-04-29T19:55:44.588Z",
+  "error": "Esta persona ya está registrada en el evento.",
+  "fields": [
+    "email",
+    "turno",
+    "fullName",
+    "participantRole",
+    "teamName",
+    "escuela",
+    "sexo",
+    "personType",
+    "boleta",
+    "carrera",
+    "semestre"
+  ],
+  "body": {
+    "email": "alumno.unico@gmail.com",
+    "turno": "Matutino",
+    "fullName": "Alumno Prueba Unico",
+    "participantRole": "OBSERVADOR",
+    "teamName": "",
+    "escuela": "ESCOM",
+    "sexo": "HOMBRE",
+    "personType": "ALUMNO",
+    "boleta": "2023999901",
+    "carrera": "Ingenieria en Sistemas Computacionales",
+    "semestre": "4"
+  }
+}

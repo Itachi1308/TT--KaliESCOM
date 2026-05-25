@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Mis registros</h2>
+  <p>Aqui puedes consultar tus eventos confirmados y en lista de espera.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Evento</th>
+          <th>Espacio</th>
+          <th>Estado</th>
+          <th>Rol</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% registrations.forEach((reg) => { %>
+          <tr>
+            <td><%= reg.title %></td>
+            <td><%= reg.spaceName %></td>
+            <td><%= reg.status %></td>
+            <td><%= reg.participantRole %></td>
+            <td><%= reg.checkinAt ? new Date(reg.checkinAt).toLocaleString('es-MX') : '-' %></td>
+            <td><%= reg.checkoutAt ? new Date(reg.checkoutAt).toLocaleString('es-MX') : '-' %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>

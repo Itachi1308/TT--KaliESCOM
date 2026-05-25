@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+<section class="layout-two-cols">
+  <aside class="card filter-panel">
+    <h3>Filtros de eventos</h3>
+
+    <h4>Tipo</h4>
+    <div class="chips">
+      <% filterOptions.types.forEach((type) => { %>
+        <label class="chip">
+          <input type="checkbox" class="filter-type" value="<%= type.toLowerCase() %>" checked />
+          <span><%= type %></span>
+        </label>
+      <% }) %>
+    </div>
+
+    <h4>Espacio</h4>
+    <div class="chips">
+      <% filterOptions.spaces.forEach((space) => { %>
+        <label class="chip">
+          <input type="checkbox" class="filter-space" value="<%= space.toLowerCase() %>" checked />
+          <span><%= space %></span>
+        </label>
+      <% }) %>
+    </div>
+
+    <button id="applyFilters" class="btn-primary full">Aplicar filtros</button>
+    <button id="clearFilters" class="btn-secondary full">Restablecer</button>
+
+    <p class="muted">
+      El calendario abre en la fecha actual de tu zona horaria local y muestra eventos de prueba de todas las categorias.
+    </p>
+  </aside>
+
+  <section class="card calendar-panel">
+    <div id="calendar"></div>
+    <div id="eventDetail" class="event-detail">
+      <h4>Selecciona un evento</h4>
+      <p>Haz clic sobre un evento para ver sus detalles.</p>
+    </div>
+  </section>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script src="/public/js/calendar.js"></script>
+<%- include('partials/footer') %>

@@ -1,0 +1,42 @@
+{
+  "name": "escom-eventos",
+  "version": "1.0.0",
+  "description": "Sistema web MVC para gestion de eventos ESCOM",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "db:init": "node scripts/initDb.js",
+    "test": "node scripts/testSmoke.js",
+    "test:unit": "npm run db:init && jest --runInBand",
+    "migrate": "node scripts/migrate.js"
+  },
+  "keywords": [
+    "escom",
+    "eventos",
+    "mvc",
+    "calendario"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "pdfkit": "^0.15.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "pdf-parse": "^2.4.5",
+    "pdfjs-dist": "^5.7.284",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "setupFiles": [
+      "<rootDir>/tests/setupFilesInitDb.js"
+    ]
+  }
+}

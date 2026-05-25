@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Actores, roles y permisos (RBAC) segun organigrama ESCOM</h2>
+  <p>
+    Esta matriz implementa actores institucionales con permisos diferenciados por unidad.
+    El actor activo se selecciona en la barra superior para simular autenticacion por perfil.
+  </p>
+</section>
+
+<section class="card">
+  <h3>Permisos por rol</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Rol</th>
+          <th>Codigo</th>
+          <th>Permisos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% matrix.matrix.forEach((row) => { %>
+          <tr>
+            <td><%= row.role.name %></td>
+            <td><%= row.role.code %></td>
+            <td>
+              <% if (row.permissionCodes.length === 0) { %>
+                Sin permisos operativos
+              <% } else { %>
+                <%= row.permissionCodes.join(', ') %>
+              <% } %>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="card">
+  <h3>Reglas implementadas de entrevistas</h3>
+  <ul>
+    <li>Ningun evento se publica sin aprobaciones del flujo correspondiente.</li>
+    <li>Si el solicitante es estudiante, se obliga aval de profesor responsable.</li>
+    <li>Espacio determina aprobador: Direccion, Subdireccion Academica, UDI o Servicios Estudiantiles.</li>
+    <li>Si hay externos, se agrega etapa de Subdireccion Administrativa (72h minimas).</li>
+    <li>No se permite registrar eventos con cobro interno (monto mayor a 0).</li>
+  </ul>
+</section>
+<%- include('partials/footer') %>

@@ -1,0 +1,69 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Diagrama de flujo corregido (sin bucles ambiguos)</h2>
+  <p>
+    Se normalizo el flujo para que las ramas de negociacion y reagendado terminen en un punto claro: nueva solicitud formal.
+    No existen ciclos infinitos en el diagrama, solo transiciones de reproceso controlado.
+  </p>
+  <pre class="code-block"><code>flowchart TD
+    IDEA[Idea de evento] --> TIPO{Tipo de organizador}
+    TIPO -->|Estudiante| PROF[Profesor responsable autoriza]
+    TIPO -->|Profesor| JEFE[Jefe de departamento]
+    TIPO -->|Jefe/Externo| JEFE
+    PROF --> JEFE
+
+    JEFE --> DEFINE[Definir fecha, horario, lugar y agenda]
+    DEFINE --> ESPACIO{Espacio solicitado}
+
+    ESPACIO -->|Auditorio| DIR_REQ[Memo u oficio a Direccion]
+    ESPACIO -->|Sala 14/Salones| ACAD_REQ[Memo a Subdireccion Academica]
+    ESPACIO -->|Laboratorios| UDI_REQ[Solicitud a UDI]
+    ESPACIO -->|Canchas/Explanada| SERV_REQ[Notificacion a Servicios Estudiantiles]
+
+    DIR_REQ --> DIR_REV{Disponible}
+    ACAD_REQ --> ACAD_REV{Disponible}
+    UDI_REQ --> UDI_REV{Disponible}
+    SERV_REQ --> SERV_REV{Disponible}
+
+    DIR_REV -->|Si| RESERVA_OK[Espacio reservado]
+    ACAD_REV -->|Si| RESERVA_OK
+    UDI_REV -->|Si| RESERVA_OK
+    SERV_REV -->|Si| RESERVA_OK
+
+    DIR_REV -->|No| REPROG[Nueva fecha propuesta]
+    ACAD_REV -->|No| REPROG
+    UDI_REV -->|No| REPROG
+    SERV_REV -->|No| REPROG
+
+    REPROG --> NUEVA_SOL[Nueva solicitud formal]
+    NUEVA_SOL --> DEFINE
+
+    RESERVA_OK --> EXTERNOS{Hay visitantes externos}
+    EXTERNOS -->|Si| ACCESO[Enviar lista 72h antes a Subdireccion Administrativa]
+    EXTERNOS -->|No| DIFUSION[Difusion institucional]
+    ACCESO --> DIFUSION
+
+    DIFUSION --> REGISTRO{Requiere registro previo}
+    REGISTRO -->|Si| PRE_REG[Formulario web o QR]
+    REGISTRO -->|No| PUERTA[Registro en puerta]
+
+    PRE_REG --> AFORO[Control de aforo]
+    PUERTA --> AFORO
+    AFORO --> EVENTO[Desarrollo del evento]
+
+    EVENTO --> INC{Incidente critico}
+    INC -->|No| FIN[Finaliza evento]
+    INC -->|Si| CONTINGENCIA[Aplicar plan B o cancelar]
+    CONTINGENCIA --> REAGENDA[Reagendar con nueva solicitud]
+    REAGENDA --> NUEVA_SOL
+
+    FIN --> CONST{Genera constancias}
+    CONST -->|Si| CUR{Requiere CUR DEFIE}
+    CUR -->|Si| DEFIE[Enviar lista en 5 dias habiles]
+    DEFIE --> CONST_FIN[Emitir constancias con firmas]
+    CUR -->|No| CONST_FIN
+    CONST -->|No| REPORTES[Generar reportes]
+    CONST_FIN --> REPORTES
+    REPORTES --> CIERRE[Proceso concluido]</code></pre>
+</section>
+<%- include('partials/footer') %>

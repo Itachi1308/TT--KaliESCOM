@@ -1,0 +1,96 @@
+<%- include('partials/header') %>
+<section class="card">
+  <h2>Factibilidad del sistema basada en entrevistas</h2>
+  <p>
+    La propuesta es viable y resuelve problemas clave: difusion dispersa, control manual de asistencia,
+    falta de trazabilidad en reservas y retraso en constancias.
+  </p>
+</section>
+
+<section class="stats-grid">
+  <article class="card">
+    <h3>Factibilidad tecnica</h3>
+    <ul>
+      <li>Arquitectura MVC implementada con Node.js + Express + SQLite.</li>
+      <li>Calendario interactivo con filtros por tipo y espacio.</li>
+      <li>API para eventos y filtros consumida por frontend.</li>
+      <li>Escalable a notificaciones por WhatsApp/correo en una siguiente fase.</li>
+    </ul>
+  </article>
+
+  <article class="card">
+    <h3>Factibilidad operativa</h3>
+    <ul>
+      <li>Respeta flujo real: autorizaciones, reserva, difusion, aforo, reportes.</li>
+      <li>Incluye estados de publicacion: borrador, revision, publicado.</li>
+      <li>Soporta eventos con externos y validaciones de tiempos (72h).</li>
+      <li>Centraliza informacion para alumnos, docentes y administradores.</li>
+    </ul>
+  </article>
+
+  <article class="card">
+    <h3>Factibilidad economica</h3>
+    <ul>
+      <li>Stack open source sin licencias de pago obligatorias.</li>
+      <li>SQLite reduce costo de infraestructura en fase piloto.</li>
+      <li>Automatizar listas y reportes reduce horas administrativas por evento.</li>
+      <li>Disminuye reprocesos por uso de multiples plataformas dispersas.</li>
+    </ul>
+  </article>
+
+  <article class="card">
+    <h3>Factibilidad institucional</h3>
+    <ul>
+      <li>Usa identidad grafica oficial ESCOM (azul obscuro y turquesa).</li>
+      <li>Alineado con reglas de aforo y prioridad de espacios.</li>
+      <li>RBAC implementado en BD y backend: direccion, subdirecciones, UDI, servicios, profesor, representante y alumno.</li>
+      <li>Permite evolucionar a constancias PDF con CUR y firmas oficiales.</li>
+    </ul>
+  </article>
+</section>
+
+<section class="card">
+  <h3>Actores institucionales del organigrama</h3>
+  <ul>
+    <li>Direccion: superadministrador y publicacion final de eventos.</li>
+    <li>Subdireccion Academica: autorizacion de Sala 14 y salones.</li>
+    <li>Subdireccion Administrativa: control de externos con regla de 72 horas.</li>
+    <li>UDI: autorizacion de laboratorios.</li>
+    <li>Servicios Estudiantiles: autorizacion de espacios de su competencia.</li>
+    <li>Profesor responsable: aval obligatorio para solicitudes de estudiantes.</li>
+    <li>Representantes estudiantiles y alumnos: creacion de borradores y solicitud de revision.</li>
+  </ul>
+</section>
+
+<section class="card">
+  <h3>Trazabilidad a necesidades detectadas</h3>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Necesidad detectada</th>
+          <th>Implementacion en el sistema</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Difusion dispersa y falta de plataforma centralizada</td>
+          <td>Portal unico con paginas de inicio, calendario, flujo y listado.</td>
+        </tr>
+        <tr>
+          <td>Filtros por tipo/espacio para alumnos</td>
+          <td>Filtros interactivos por academico, cultural, deportivo y todos los espacios solicitados.</td>
+        </tr>
+        <tr>
+          <td>Control de aforo y visibilidad de cupos</td>
+          <td>Eventos con capacidad por espacio y detalle en el panel lateral del calendario.</td>
+        </tr>
+        <tr>
+          <td>Necesidad de reportes por categoria y procedencia</td>
+          <td>Modelo de datos relacional preparado para reporteria y exportacion.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+<%- include('partials/footer') %>

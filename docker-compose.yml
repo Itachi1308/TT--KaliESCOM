@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  escom-eventos:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - SESSION_SECRET=${SESSION_SECRET}
+    volumes:
+      - ./database:/app/database
+    restart: unless-stopped

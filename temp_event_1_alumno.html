@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jornada de Ciencia de Datos | ESCOM Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+  <link rel="stylesheet" href="/public/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-wrap">
+      <h1>ESCOM Eventos</h1>
+      <p>Sistema institucional para eventos academicos, culturales y deportivos</p>
+    </div>
+    
+      <div class="actor-toolbar">
+        <p class="actor-perms">
+          Sesion activa: <strong>Alumno General ESCOM</strong>
+          
+            | Roles: Alumno
+          
+        </p>
+        <form method="POST" action="/logout">
+          <button type="submit" class="btn-secondary">Cerrar sesion</button>
+        </form>
+      </div>
+    
+    <nav class="nav-actions">
+      
+      <a class="btn-nav" href="/">Inicio</a>
+      <a class="btn-nav" href="/calendario">Calendario</a>
+      <a class="btn-nav" href="/eventos">Eventos</a>
+      
+        <a class="btn-nav" href="/mis-registros">Mis registros</a>
+      
+      
+      <a class="btn-nav" href="/flujo">Flujo</a>
+      <a class="btn-nav" href="/factibilidad">Factibilidad</a>
+      <a class="btn-nav" href="/rbac">Roles y permisos</a>
+      
+    </nav>
+  </header>
+  <main class="main-content">
+
+<section class="card">
+  <h2>Jornada de Ciencia de Datos</h2>
+  <p><strong>Tipo:</strong> <span class="badge" style="background:#0047B6">Academico</span></p>
+  <p><strong>Espacio:</strong> Auditorio (Auditorio) - Capacidad: 250</p>
+  <p><strong>Fecha:</strong> 23/4/2026, 10:00:00 a.m. — 23/4/2026, 1:00:00 p.m.</p>
+  <p><strong>Organizador:</strong> Subdireccion Academica</p>
+  <p><strong>Descripción:</strong> Jornada de Ciencia de Datos - Tema: Sistemas</p>
+
+  <div class="separator"></div>
+
+  
+
+  
+    <section>
+      <h3>Información para Alumno</h3>
+      <ul>
+        <li>Si el evento requiere registro: asegúrate de tener tu boleta y datos personales completos.</li>
+        <li>Verifica horarios para evitar empalmes con otras actividades.</li>
+        <li>Si estás confirmado recibirás notificación; si estás en lista de espera, serás notificado si hay cupo.</li>
+      </ul>
+      
+        <a class="btn-secondary" href="/registro/1">Registrarme</a>
+      
+    </section>
+  
+
+  
+
+  
+
+</section>
+  </main>
+  <footer class="site-footer">
+    <p>Escuela Superior de Computo - IPN | Colores oficiales #0047B6 y azul turquesa</p>
+  </footer>
+</body>
+</html>
+

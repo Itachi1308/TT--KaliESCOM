@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registro al evento | ESCOM Eventos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+  <link rel="stylesheet" href="/public/css/styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand-wrap">
+      <h1>ESCOM Eventos</h1>
+      <p>Sistema institucional para eventos academicos, culturales y deportivos</p>
+    </div>
+    
+      <div class="actor-toolbar">
+        <p class="actor-perms">
+          Sesion activa: <strong>Alumno General ESCOM</strong>
+          
+            | Roles: Alumno
+          
+        </p>
+        <form method="POST" action="/logout">
+          <button type="submit" class="btn-secondary">Cerrar sesion</button>
+        </form>
+      </div>
+    
+    <nav class="nav-actions">
+      
+      <a class="btn-nav" href="/">Inicio</a>
+      <a class="btn-nav" href="/calendario">Calendario</a>
+      <a class="btn-nav" href="/eventos">Eventos</a>
+      
+        <a class="btn-nav" href="/mis-registros">Mis registros</a>
+      
+      
+      <a class="btn-nav" href="/flujo">Flujo</a>
+      <a class="btn-nav" href="/factibilidad">Factibilidad</a>
+      <a class="btn-nav" href="/rbac">Roles y permisos</a>
+      
+    </nav>
+  </header>
+  <main class="main-content">
+
+<section class="card hero-banner">
+  <div>
+    <h2>Registro al evento</h2>
+    <p class="muted">Jornada de Ciencia de Datos</p>
+  </div>
+  <div class="hero-banner-meta">
+    <span class="badge" style="background:#0047B6">Auditorio</span>
+    <span class="badge" style="background:#00AFCF">250 cupos</span>
+  </div>
+  <p><strong>Horario:</strong> 23/4/2026, 10:00:00 a.m. - 23/4/2026, 1:00:00 p.m.</p>
+
+  
+
+  
+</section>
+
+
+
+<section class="layout-two-cols">
+  <article class="card">
+    <h3>Autollenado por credencial QR</h3>
+    <p class="muted">Pega el enlace o deja que el lector QR escriba el contenido. El sistema llenará los datos del alumno o docente desde la credencial vcred.</p>
+
+    <div class="qr-autofill" data-qr-autofill data-endpoint="/api/credenciales/parsear">
+      <label>Enlace o token QR</label>
+      <input id="credentialQrInputPreview" placeholder="https://servicios.dae.ipn.mx/vcred/?h=..." />
+      <button type="button" class="btn-secondary full" data-qr-fill>Autollenar credencial</button>
+      <p class="muted" data-qr-status>Los campos se completarán con boleta, nombre, carrera, escuela, CURP y turno cuando la credencial sea valida.</p>
+      <div class="chip-row" data-qr-preview></div>
+    </div>
+
+    <div class="credential-grid">
+      <div>
+        <label>Boleta</label>
+        <input name="boleta" value="" />
+      </div>
+      <div>
+        <label>CURP</label>
+        <input name="curp" />
+      </div>
+      <div>
+        <label>Nombre completo</label>
+        <input name="fullName" value="Alumno General ESCOM" required />
+      </div>
+      <div>
+        <label>Correo institucional o de contacto</label>
+        <input type="email" name="email" value="alumno@alumno.ipn.mx" required />
+      </div>
+      <div>
+        <label>Carrera</label>
+        <input name="carrera" />
+      </div>
+      <div>
+        <label>Escuela / procedencia academica</label>
+        <input name="escuela" placeholder="ESCOM" />
+      </div>
+      <div>
+        <label>Turno</label>
+        <input name="turno" />
+      </div>
+      <div>
+        <label>Procedencia externa</label>
+        <input name="procedencia" />
+      </div>
+      <div>
+        <label>Numero de empleado</label>
+        <input name="employeeNumber" />
+      </div>
+      <div>
+        <label>Semestre</label>
+        <input name="semestre" />
+      </div>
+    </div>
+
+    <input type="hidden" name="credentialQrInput" />
+    <input type="hidden" name="credentialQrUrl" />
+    <input type="hidden" name="credentialQrToken" />
+    <input type="hidden" name="curp" />
+    <input type="hidden" name="escuela" />
+    <input type="hidden" name="turno" />
+  </article>
+
+  <article class="card">
+    <h3>Datos de asistencia</h3>
+    <form method="POST" action="/registro/1" data-qr-autofill-form>
+      <label>Tipo de persona</label>
+      <select name="personType" required>
+        <option value="ALUMNO" selected>Alumno</option>
+        <option value="DOCENTE" >Docente</option>
+        <option value="EXTERNO" >Externo</option>
+      </select>
+
+      <label>Sexo</label>
+      <select name="sexo" required>
+        <option value="HOMBRE">Hombre</option>
+        <option value="MUJER">Mujer</option>
+        <option value="PREFIERO_NO_DECIR">Prefiero no decirlo</option>
+      </select>
+
+      <label>Rol en el evento</label>
+      <select name="participantRole" required>
+        <option value="ASISTENTE">Asistente</option>
+        <option value="PONENTE">Ponente</option>
+        <option value="STAFF">Staff</option>
+        <option value="PARTICIPANTE_ACTIVO">Participante activo</option>
+        <option value="OBSERVADOR">Observador</option>
+      </select>
+
+      <label>Equipo (opcional para torneos/hackatones)</label>
+      <input name="teamName" />
+
+      <button class="btn-primary full" type="submit">Registrar asistencia</button>
+    </form>
+  </article>
+</section>
+<script src="/public/js/registration-qr.js"></script>
+  </main>
+  <footer class="site-footer">
+    <p>Escuela Superior de Computo - IPN | Colores oficiales #0047B6 y azul turquesa</p>
+  </footer>
+</body>
+</html>
+
